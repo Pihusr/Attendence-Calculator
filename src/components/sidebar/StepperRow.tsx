@@ -1,4 +1,5 @@
 import type { ClassType, Counts } from '../../types';
+import { adjustCount } from '../../lib/counts';
 
 const LABELS: Record<ClassType, string> = {
   lecture: 'Lectures',
@@ -28,7 +29,7 @@ export default function StepperRow({
         {inlineMessage && <small className="validation-message">{inlineMessage}</small>}
       </div>
       <div className="stepper">
-        <button type="button" aria-label={`Decrease ${LABELS[type]}`} onClick={() => onChange(value - 1)}>−</button>
+        <button type="button" aria-label={`Decrease ${LABELS[type]}`} onClick={() => onChange(adjustCount(value, -1))}>−</button>
         <input
           type="number"
           min="0"
@@ -41,7 +42,7 @@ export default function StepperRow({
             if (/^\d*$/.test(typed)) onChange(typed === '' ? 0 : Number(typed));
           }}
         />
-        <button type="button" aria-label={`Increase ${LABELS[type]}`} onClick={() => onChange(value + 1)}>+</button>
+        <button type="button" aria-label={`Increase ${LABELS[type]}`} onClick={() => onChange(adjustCount(value, 1))}>+</button>
       </div>
     </div>
   );

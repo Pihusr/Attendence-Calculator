@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Subject } from '../../types';
 import { calculateResults } from '../calculate';
+import { countClasses } from '../schedule';
 
 const subject: Subject = {
   id: 'math',
@@ -15,6 +16,50 @@ const subject: Subject = {
 };
 
 describe('calculateResults', () => {
+  it('calculates the UG-I calendar scenario through 12 November 2026', () => {
+    const scenario: Subject = {
+      ...subject,
+      batch: 'UG-I',
+      startDate: null,
+      schedule: { lecture: [1, 3, 4], tutorial: [2], lab: [5] },
+      attended: { lecture: 20, tutorial: 5, lab: 8 },
+      notHeld: { lecture: 0, tutorial: 0, lab: 0 },
+    };
+
+    const result = calculateResults(scenario, '2026-11-12');
+
+    expect(result.held).toEqual({ lecture: 35, tutorial: 11, lab: 10 });
+    expect(result.remaining).toEqual({ lecture: 9, tutorial: 2, lab: 3 });
+    expect(result.weighted).toEqual({ A: 30.5, H: 50.5, F: 13 });
+    expect(result.percent).toBeCloseTo(30.5 / 50.5 * 100);
+    expect(result.status).toBe('unrecoverable');
+    expect(result.plan).toEqual({
+      nowWeighted: 29.5,
+      nowCounts: { lecture: 9, tutorial: 2, lab: 3 },
+      endWeighted: 17.125,
+      endCounts: { lecture: 9, tutorial: 2, lab: 3 },
+      skipWeighted: 0,
+      skipCounts: { lecture: 0, tutorial: 0, lab: 0 },
+      unrecoverable: true,
+    });
+
+    expect(result.removed.map(({ date }) => date)).toEqual(expect.arrayContaining([
+      '2026-09-04',
+      '2026-10-02',
+      '2026-10-19',
+      '2026-10-20',
+      '2026-10-26',
+      '2026-11-09',
+      '2026-11-10',
+      '2026-11-11',
+      '2026-11-12',
+    ]));
+    expect(countClasses(scenario, '2026-11-09', '2026-11-13'))
+      .toEqual({ lecture: 0, tutorial: 0, lab: 0 });
+    expect(countClasses(scenario, '2026-10-31', '2026-10-31'))
+      .toEqual({ lecture: 1, tutorial: 0, lab: 0 });
+  });
+
   it('combines the engine and snapshots all calculation inputs', () => {
     const result = calculateResults(subject, '2026-10-26');
     expect(result.held.lecture).toBe(1);

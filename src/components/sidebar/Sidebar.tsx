@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import type { ClassType } from '../../types';
-import { setCount, setScheduleDay, useStore } from '../../state/store';
+import type { ClassType, Weekday } from '../../types';
+import { setCount } from '../../lib/counts';
+import { setScheduleDay, useStore } from '../../state/store';
 import { batchStart } from '../../lib/calendar';
 import BatchRow from './BatchRow';
 import CalculateButton from './CalculateButton';
@@ -13,7 +14,14 @@ import WeekdayPicker from './WeekdayPicker';
 
 const CLASS_TYPES: ClassType[] = ['lecture', 'tutorial', 'lab'];
 const TYPE_LABELS: Record<ClassType, string> = { lecture: 'Lectures', tutorial: 'Tutorials', lab: 'Labs' };
-const WEEKDAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const WEEKDAY_NAMES: Record<Weekday, string> = {
+  1: 'Mon',
+  2: 'Tue',
+  3: 'Wed',
+  4: 'Thu',
+  5: 'Fri',
+  6: 'Sat',
+};
 
 export default function Sidebar() {
   const { state, subject, updateSubject, setAsOf, toggleSidebar } = useStore();
@@ -21,7 +29,7 @@ export default function Sidebar() {
   const toggleRow = (id: string) => setExpandedRow((current) => current === id ? null : id);
   const dateValue = subject.startDate ?? batchStart(subject.batch);
   const scheduleValue = (type: ClassType) => subject.schedule[type].length
-    ? subject.schedule[type].map((day) => WEEKDAY_NAMES[day - 1]).join(', ')
+    ? subject.schedule[type].map((day) => WEEKDAY_NAMES[day]).join(', ')
     : 'Not set';
   const chipColor = subject.lastStatus === 'safe'
     ? 'var(--safe)'

@@ -178,7 +178,3 @@ export function setScheduleDay(
     : [...schedule[type], day].sort();
   return { ...schedule, [type]: selected };
 }
-
-export function setCount(counts: Counts, type: ClassType, value: number): Counts {
-  return { ...counts, [type]: Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0 };
-}
