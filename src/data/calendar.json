@@ -1,0 +1,29 @@
+{
+  "id": "2026-27-odd",
+  "label": "Odd Sem 2026-27",
+  "batches": {
+    "UG-I": { "start": "2026-08-17" },
+    "PhD-I": { "start": "2026-08-17" },
+    "PG-I": { "start": "2026-08-03" }
+  },
+  "lastTeachingDay": "2026-12-04",
+  "estWindow": { "start": "2026-12-07", "end": "2026-12-19" },
+  "holidays": [
+    { "date": "2026-09-04", "name": "Janmashtami" },
+    { "date": "2026-10-02", "name": "Gandhi Jayanti" },
+    { "date": "2026-10-20", "name": "Dussehra" },
+    { "date": "2026-10-26", "name": "Birthday of Maharishi Balmiki Ji" },
+    { "date": "2026-11-24", "name": "Gurupurab (Guru Nanak Dev Ji)" },
+    { "date": "2026-12-14", "name": "Shaheedi Diwas (Guru Teg Bahadur Ji)" }
+  ],
+  "nonTeaching": [
+    { "date": "2026-10-19", "name": "Non-teaching day (made up on 31 Oct)" },
+    { "date": "2026-11-23", "name": "Non-teaching day (made up on 28 Nov)" },
+    { "from": "2026-11-09", "to": "2026-11-13", "name": "Diwali break" }
+  ],
+  "substituteDays": [
+    { "date": "2026-10-31", "followsWeekday": 1, "note": "Saturday follows Monday's timetable, in lieu of 19 Oct" },
+    { "date": "2026-11-28", "followsWeekday": 1, "note": "Saturday follows Monday's timetable, in lieu of 23 Nov" }
+  ],
+  "assumptions": { "saturdaysOffByDefault": true, "classesHeldDuringMST": true }
+}
