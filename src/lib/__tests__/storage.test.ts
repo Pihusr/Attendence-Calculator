@@ -11,6 +11,18 @@ describe('storage', () => {
     expect(loadState()).toBeNull();
   });
 
+  it('rejects structurally corrupt stored subjects', () => {
+    vi.stubGlobal('localStorage', {
+      getItem: () => JSON.stringify({
+        subjects: [null],
+        selectedId: 'broken',
+        asOf: '2026-99-99',
+        sidebarOpen: true,
+      }),
+    });
+    expect(loadState()).toBeNull();
+  });
+
   it('returns null when localStorage access throws', () => {
     vi.stubGlobal('localStorage', {
       getItem: () => { throw new Error('blocked'); },

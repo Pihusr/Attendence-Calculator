@@ -99,6 +99,9 @@ export default function Sidebar() {
               key={type}
               type={type}
               counts={subject.attended}
+              inlineMessage={state.results?.subjectId === subject.id && subject.attended[type] > state.results.held[type]
+                ? `Limited to ${state.results.held[type]} classes held`
+                : undefined}
               onChange={(value) => updateSubject({ attended: setCount(subject.attended, type, value) })}
             />
           ))}

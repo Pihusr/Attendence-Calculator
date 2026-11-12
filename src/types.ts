@@ -20,10 +20,15 @@ export interface Results {
   subjectId: string;
   inputSnapshot: string;
   asOf: string;
+  attended: Counts;
   held: Counts;
   remaining: Counts;
   weighted: { A: number; H: number; F: number };
   percent: number | null;
+  targetProgressPercent: number | null;
+  aboveTargetBy: number | null;
+  bestPossiblePercent: number | null;
+  targetPie: { attended: number; gap: number };
   status: Status;
   plan: Plan;
   removed: RemovedClass[];

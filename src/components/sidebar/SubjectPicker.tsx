@@ -1,17 +1,24 @@
-import type { ChangeEvent } from 'react';
 import { useStore } from '../../state/store';
 
 export default function SubjectPicker() {
   const { state, subject, addSubject, deleteSubject, selectSubject, updateSubject } = useStore();
-  const onSelect = (event: ChangeEvent<HTMLSelectElement>) => selectSubject(event.target.value);
+  const chipColor = (status: string) => status === 'safe' ? 'var(--safe)'
+    : status === 'caution' ? 'var(--caution)'
+      : status === 'short' ? 'var(--short)'
+        : status === 'unrecoverable' ? 'var(--unrecoverable)' : 'var(--muted)';
   return (
     <div className="subject-editor">
-      <label className="editor-label" htmlFor="subject-select">Your subjects</label>
-      <select id="subject-select" value={subject.id} onChange={onSelect}>
+      <span className="editor-label">Your subjects</span>
+      <div className="subject-list" role="list">
         {state.subjects.map((item) => (
-          <option value={item.id} key={item.id}>{item.name || 'Untitled subject'}</option>
+          <button className={`subject-choice${item.id === subject.id ? ' selected' : ''}`} type="button"
+            key={item.id} onClick={() => selectSubject(item.id)} aria-pressed={item.id === subject.id}>
+            <i className="subject-chip" style={{ backgroundColor: chipColor(item.lastStatus) }} />
+            <span>{item.name || 'Untitled subject'}</span>
+            <small>{item.lastPercent === null ? 'Not calculated' : `${item.lastPercent.toFixed(1)}%`}</small>
+          </button>
         ))}
-      </select>
+      </div>
       <label className="editor-label" htmlFor="subject-name">Subject name</label>
       <input
         id="subject-name"
@@ -25,7 +32,11 @@ export default function SubjectPicker() {
           type="button"
           className="subtle-button danger-text"
           disabled={state.subjects.length <= 1}
-          onClick={() => deleteSubject(subject.id)}
+          onClick={() => {
+            if (window.confirm(`Delete "${subject.name || 'Untitled subject'}"? This cannot be undone.`)) {
+              deleteSubject(subject.id);
+            }
+          }}
         >
           Delete
         </button>

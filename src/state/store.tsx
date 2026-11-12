@@ -71,7 +71,9 @@ function initializeState(): AppState {
     selectedId,
     asOf: saved?.asOf ?? today(),
     asOfCustom: saved?.asOf !== null && saved?.asOf !== undefined,
-    sidebarOpen: saved?.sidebarOpen ?? true,
+    sidebarOpen: typeof window !== 'undefined' && window.matchMedia('(max-width: 800px)').matches
+      ? false
+      : saved?.sidebarOpen ?? true,
     results: null,
   };
 }
@@ -83,6 +85,7 @@ function reducer(state: AppState, action: Action): AppState {
         ...state,
         subjects: [...state.subjects, action.subject],
         selectedId: action.subject.id,
+        results: null,
       };
     case 'deleteSubject': {
       if (state.subjects.length <= 1) return state;
@@ -91,11 +94,12 @@ function reducer(state: AppState, action: Action): AppState {
         ...state,
         subjects,
         selectedId: state.selectedId === action.id ? subjects[0].id : state.selectedId,
+        results: null,
       };
     }
     case 'selectSubject':
       return state.subjects.some((subject) => subject.id === action.id)
-        ? { ...state, selectedId: action.id }
+        ? { ...state, selectedId: action.id, results: null }
         : state;
     case 'updateSubject':
       return {

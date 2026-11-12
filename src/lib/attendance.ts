@@ -1,6 +1,8 @@
 import type { Counts, Status } from '../types';
 import { weightedSum } from './weights';
 
+export const TARGET = 75;
+
 export function weightedTotals(
   attended: Counts,
   held: Counts,
